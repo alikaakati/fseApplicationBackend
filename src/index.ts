@@ -23,10 +23,8 @@ async function main(): Promise<void> {
     const command = args[0];
 
     // Define data URLs
-    const quickBooksUrl =
-      "https://file.notion.so/f/f/341ba97f-38cd-4258-82a9-94cc0df05d13/3e13a193-001b-4fb8-80cf-ea40eb3c5682/Income_Statement_Company_1.json?table=block&id=22a353cd-1af1-8006-bd9c-d33ec0b1f7cb&spaceId=341ba97f-38cd-4258-82a9-94cc0df05d13&expirationTimestamp=1753221600000&signature=TAJ2Vz_Ko48vUXhWdS6npjCTFNAeEFkT5c7mPL5vlTw&downloadName=Income_Statement_Company_1.json";
-    const rootfiUrl =
-      "https://file.notion.so/f/f/341ba97f-38cd-4258-82a9-94cc0df05d13/fea332be-907b-483b-a798-57c305fa8e7a/Income_Statement_Company_2.json?table=block&id=22a353cd-1af1-800c-9be7-fb79305c06fd&spaceId=341ba97f-38cd-4258-82a9-94cc0df05d13&expirationTimestamp=1753221600000&signature=K-0moqniOb7PGpuQ8xIUbZj4CEA-tPJlC5Zg-WOfKtU&downloadName=Income_Statement_Company_2.json";
+    const quickBooksUrl = process.env.QUICKBOOKS_URL || "";
+    const rootfiUrl = process.env.ROOTFI_URL || "";
 
     let result;
 
