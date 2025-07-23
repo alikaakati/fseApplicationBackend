@@ -46,7 +46,6 @@ export interface FinancialCategoryEntity extends BaseEntity {
  */
 export interface FinancialLineItemEntity extends BaseEntity {
   category: FinancialCategoryEntity;
-  originalName: string;
   name: string;
   value: number;
 }

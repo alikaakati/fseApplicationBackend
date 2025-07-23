@@ -30,9 +30,6 @@ export class FinancialLineItem {
   category: FinancialCategory;
 
   @Column({ length: 255, nullable: false })
-  originalName: string;
-
-  @Column({ length: 255, nullable: false })
   name: string;
 
   @Column({ type: "decimal", precision: 15, scale: 2, default: 0 })

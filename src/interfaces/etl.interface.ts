@@ -27,7 +27,6 @@ export interface QuickBooksGroup {
  */
 export interface LineItemData {
   lineItem: string;
-  originalName: string;
   group: string;
   valuesArray?: any[];
   type: "normal" | "summary" | "total";

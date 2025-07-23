@@ -4,20 +4,6 @@
  */
 
 /**
- * Cleans and normalizes line item titles for consistent naming
- * @param title - The original title to clean
- * @returns The cleaned and normalized title
- */
-export const cleanLineItemTitles = (title: string): string => {
-  return title
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[()]/g, "")
-    .replace(/\s+/g, "_")
-    .replace(/[^a-z0-9_]/g, "");
-};
-
-/**
  * Formats a number as currency
  * @param value - The number to format
  * @param currency - The currency code (default: USD)

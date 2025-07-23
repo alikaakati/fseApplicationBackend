@@ -15,7 +15,6 @@ import {
   LineType,
   QUICKBOOKS_UNIFIED_KEYS,
 } from "../../interfaces/etl.interface";
-import { cleanLineItemTitles } from "../../utils/helpers/text.utils";
 import { isValidNumber } from "../../utils/helpers/validation.utils";
 
 /**
@@ -82,21 +81,18 @@ export class QuickBooksETLService {
    * Creates a line item data object from column data
    * @param colData - The column data
    * @param group - The group name
-   * @param originalName - The original name
    * @returns Line item data object
    */
   private createLineItemFromColData(
     colData: any[],
-    group: string,
-    originalName: string
+    group: string
   ): LineItemData {
     const lineItem = colData[0]?.value || "";
     const type = this.determineLineType(lineItem);
     const valuesArray = colData.slice(1).map((col) => col.value);
 
     return {
-      lineItem: cleanLineItemTitles(lineItem),
-      originalName,
+      lineItem: lineItem,
       group,
       valuesArray,
       type,
@@ -116,8 +112,7 @@ export class QuickBooksETLService {
         if (row.ColData && row.ColData.length > 0) {
           const lineItem = this.createLineItemFromColData(
             row.ColData,
-            parentGroup,
-            row.ColData[0]?.value || ""
+            parentGroup
           );
 
           // Only add normal line items (not summaries or totals)
@@ -223,7 +218,6 @@ export class QuickBooksETLService {
                 (period.lineItems as Record<string, any>)[unifiedKey].push({
                   key: item.lineItem,
                   value,
-                  originalName: item.originalName,
                 });
               }
             });

@@ -82,7 +82,6 @@ export class DatabaseService {
                 const lineItem = new FinancialLineItem();
                 lineItem.category = category;
                 lineItem.name = lineItemData.key;
-                lineItem.originalName = lineItemData.originalName;
                 lineItem.value = lineItemData.value;
                 lineItem.accountId = lineItemData.accountId;
                 lineItem.itemType = this.getItemType(categoryKey);

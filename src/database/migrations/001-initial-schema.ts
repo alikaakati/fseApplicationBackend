@@ -13,7 +13,6 @@ export class InitialSchema1700000000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Check if all tables already exist
     const companyExists = await queryRunner.hasTable("company");
-    const userExists = await queryRunner.hasTable("user");
     const reportPeriodExists = await queryRunner.hasTable("report_period");
     const financialCategoryExists = await queryRunner.hasTable(
       "financial_category"
@@ -24,7 +23,6 @@ export class InitialSchema1700000000000 implements MigrationInterface {
 
     if (
       companyExists &&
-      userExists &&
       reportPeriodExists &&
       financialCategoryExists &&
       financialLineItemExists
@@ -92,19 +90,6 @@ export class InitialSchema1700000000000 implements MigrationInterface {
         "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
         "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
         CONSTRAINT "PK_financial_line_item" PRIMARY KEY ("id")
-      )
-    `);
-
-    // Create users table
-    await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS "user" (
-        "id" SERIAL NOT NULL,
-        "name" character varying(255) NOT NULL,
-        "email" character varying(255),
-        "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-        "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
-        CONSTRAINT "PK_user" PRIMARY KEY ("id"),
-        CONSTRAINT "UQ_user_email" UNIQUE ("email")
       )
     `);
 
@@ -213,16 +198,6 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       );
     }
 
-    try {
-      await queryRunner.query(`
-        CREATE INDEX IF NOT EXISTS "IDX_user_email" ON "user" ("email")
-      `);
-    } catch (error) {
-      console.log(
-        "⚠️  Index IDX_user_email already exists or failed (user table might not have email column)"
-      );
-    }
-
     console.log("✅ Database schema created successfully");
   }
 
@@ -230,7 +205,6 @@ export class InitialSchema1700000000000 implements MigrationInterface {
     console.log("🔄 Dropping database schema...");
 
     // Drop indexes
-    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_user_email"`);
     await queryRunner.query(
       `DROP INDEX IF EXISTS "IDX_financial_line_item_key"`
     );
@@ -259,7 +233,6 @@ export class InitialSchema1700000000000 implements MigrationInterface {
     );
 
     // Drop tables
-    await queryRunner.query(`DROP TABLE IF EXISTS "user"`);
     await queryRunner.query(`DROP TABLE IF EXISTS "financial_line_item"`);
     await queryRunner.query(`DROP TABLE IF EXISTS "financial_category"`);
     await queryRunner.query(`DROP TABLE IF EXISTS "report_period"`);

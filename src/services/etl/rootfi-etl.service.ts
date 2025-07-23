@@ -12,7 +12,6 @@ import {
   ReportDate,
   ROOTFI_UNIFIED_KEYS,
 } from "../../interfaces/etl.interface";
-import { cleanLineItemTitles } from "../../utils/helpers/text.utils";
 import { isValidNumber } from "../../utils/helpers/validation.utils";
 
 /**
@@ -69,9 +68,8 @@ export class RootfiETLService {
           // Process line items within the category
           (periodData.lineItems as Record<string, any>)[unifiedKey] =
             value[0]?.line_items?.map((item: any) => ({
-              key: cleanLineItemTitles(item.name),
+              key: item.name,
               value: item.value,
-              originalName: item.name,
             })) || [];
         } else if (isValidNumber(value)) {
           // Handle numeric values
