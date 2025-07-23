@@ -1,31 +1,72 @@
 {
-  "name": "test",
+  "name": "financial-data-etl-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A comprehensive ETL backend application for processing financial data from multiple sources including QuickBooks and Rootfi",
+  "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/server.js",
+    "test": "npm run build && npm run test-etl",
+    "etl-quickbooks": "ts-node src/index.ts --quickbooks",
+    "etl-rootfi": "ts-node src/index.ts --rootfi",
+    "etl-all": "ts-node src/index.ts --all",
+    "server": "ts-node src/server.ts",
+    "migrate": "ts-node src/migrate.ts",
+    "migrate:run": "ts-node src/migrate.ts run",
+    "migrate:revert": "ts-node src/migrate.ts revert",
+    "migrate:status": "ts-node src/migrate.ts status",
+    "migrate:create-db": "ts-node src/migrate.ts create-db",
+    "migrate:setup": "ts-node src/migrate.ts setup",
+    "migrate:reset": "ts-node src/reset-migrations.ts",
+    "migrate:drop-tables": "ts-node src/drop-tables.ts",
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "type-check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alikaakati/fseApplicationBackend.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "etl",
+    "financial-data",
+    "quickbooks",
+    "rootfi",
+    "typescript",
+    "typeorm",
+    "postgresql",
+    "data-processing"
+  ],
+  "author": "Alika Akati",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/alikaakati/fseApplicationBackend/issues"
   },
   "homepage": "https://github.com/alikaakati/fseApplicationBackend#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "@types/cors": "^2.8.19",
+    "@types/node-fetch": "^2.6.12",
+    "axios": "^1.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.25"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.15",
+    "@types/pg": "^8.15.4",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }
