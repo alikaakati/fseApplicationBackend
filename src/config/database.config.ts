@@ -28,7 +28,6 @@ export const etlConfig = {
   defaultCompanyId: 1,
   defaultGroup: "Ungrouped",
   enableLogging: true,
-  batchSize: 100,
 };
 
 /**

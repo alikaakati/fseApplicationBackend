@@ -258,7 +258,6 @@ For detailed API documentation, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
 ### Financial Line Item
 
 - Individual financial transactions or line items
-- Normalized names and original names preserved
 
 ## 🔧 Configuration
 
@@ -289,7 +288,6 @@ export const etlConfig = {
   defaultCompanyId: 1,
   defaultGroup: "Ungrouped",
   enableLogging: true,
-  batchSize: 100,
 };
 ```
 

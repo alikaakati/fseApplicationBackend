@@ -105,5 +105,4 @@ export interface ETLConfig {
   defaultCompanyId: number;
   defaultGroup: string;
   enableLogging: boolean;
-  batchSize: number;
 }
