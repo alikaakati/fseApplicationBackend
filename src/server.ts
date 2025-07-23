@@ -3,11 +3,13 @@
  * This file sets up an Express server with REST API endpoints for ETL operations,
  * including processing QuickBooks data, Rootfi data, both data sources, and clearing the database.
  */
-
+import "reflect-metadata";
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 import { initializeDatabase, closeDatabase } from "./database/data-source";
 import { appConfig } from "./config/database.config";
+import { specs } from "./config/swagger.config";
 import { healthRoutes, etlRoutes, dataRoutes } from "./routes";
 
 /**
@@ -21,6 +23,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/**
+ * Swagger documentation
+ */
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 /**
  * Route registration
@@ -72,6 +79,7 @@ const startServer = async () => {
       console.log(`🚀 Server running on port ${port}`);
       console.log(`📊 Health check: http://localhost:${port}/health`);
       console.log(`📈 API Base URL: http://localhost:${port}/api`);
+      console.log(`📚 API Documentation: http://localhost:${port}/api-docs`);
     });
   } catch (error) {
     console.error("Failed to start server:", error);

@@ -10,6 +10,7 @@ A comprehensive ETL (Extract, Transform, Load) backend application for processin
 - **Modular Architecture**: Clean separation of concerns with services and interfaces
 - **Error Handling**: Comprehensive error handling and logging
 - **Type Safety**: Full TypeScript support with strict typing
+- **API Documentation**: Interactive OpenAPI/Swagger documentation
 - **Documentation**: Well-documented codebase with JSDoc comments
 
 ## 📋 Prerequisites
@@ -235,6 +236,19 @@ curl -X POST http://localhost:3001/api/etl/all
 # Clear database
 curl -X DELETE http://localhost:3001/api/data/clear
 ```
+
+## 📚 API Documentation
+
+The application includes interactive OpenAPI/Swagger documentation that can be accessed at:
+
+**http://localhost:3001/api-docs**
+
+The documentation provides:
+
+- Complete API endpoint descriptions
+- Request/response schemas
+- Interactive testing interface
+- Example requests and responses
 
 For detailed API documentation, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
 

@@ -15,8 +15,35 @@ const router = Router();
 const financialApp = new FinancialDataApplication();
 
 /**
- * GET /api/statistics
- * Get current database statistics
+ * @swagger
+ * /api/data/statistics:
+ *   get:
+ *     summary: Get current database statistics
+ *     description: Retrieves statistics about the current data in the database
+ *     tags: [Data]
+ *     responses:
+ *       200:
+ *         description: Statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   description: Database statistics
+ *                 message:
+ *                   type: string
+ *                   example: "Statistics retrieved successfully"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get("/statistics", async (req, res) => {
   try {
@@ -38,8 +65,31 @@ router.get("/statistics", async (req, res) => {
 });
 
 /**
- * POST /api/data/refresh
- * Clear all data from the database and re-fetch from URLs
+ * @swagger
+ * /api/data/refresh:
+ *   post:
+ *     summary: Clear all data and re-fetch from URLs
+ *     description: Clears all existing data from the database and re-fetches from configured URLs
+ *     tags: [Data]
+ *     responses:
+ *       200:
+ *         description: Data refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ETLResponse'
+ *       400:
+ *         description: Bad request - refresh process failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.post("/refresh", async (req, res) => {
   try {
@@ -80,8 +130,36 @@ router.post("/refresh", async (req, res) => {
 });
 
 /**
- * GET /api/companies
- * Get all companies with their data
+ * @swagger
+ * /api/data/companies:
+ *   get:
+ *     summary: Get all companies with their data
+ *     description: Retrieves all companies and their associated financial data
+ *     tags: [Data]
+ *     responses:
+ *       200:
+ *         description: Companies retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Companies endpoint - to be implemented"
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get("/companies", async (req, res) => {
   try {
@@ -105,8 +183,36 @@ router.get("/companies", async (req, res) => {
 });
 
 /**
- * GET /api/report-dates
- * Get all report dates
+ * @swagger
+ * /api/data/report-dates:
+ *   get:
+ *     summary: Get all report dates
+ *     description: Retrieves all available report dates from the database
+ *     tags: [Data]
+ *     responses:
+ *       200:
+ *         description: Report dates retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 message:
+ *                   type: string
+ *                   example: "Report dates retrieved successfully"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get("/report-dates", async (req, res) => {
   try {
@@ -128,8 +234,49 @@ router.get("/report-dates", async (req, res) => {
 });
 
 /**
- * GET /api/categories/:reportPeriodId
- * Get all categories with their line items by report period ID
+ * @swagger
+ * /api/data/categories/{reportPeriodId}:
+ *   get:
+ *     summary: Get categories by report period ID
+ *     description: Retrieves all categories with their line items for a specific report period
+ *     tags: [Data]
+ *     parameters:
+ *       - in: path
+ *         name: reportPeriodId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the report period
+ *     responses:
+ *       200:
+ *         description: Categories retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 message:
+ *                   type: string
+ *                   example: "Categories retrieved successfully"
+ *       400:
+ *         description: Bad request - invalid report period ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get("/categories/:reportPeriodId", async (req, res) => {
   try {

@@ -15,8 +15,31 @@ const router = Router();
 const financialApp = new FinancialDataApplication();
 
 /**
- * POST /api/etl/quickbooks
- * Process QuickBooks data
+ * @swagger
+ * /api/etl/quickbooks:
+ *   post:
+ *     summary: Process QuickBooks data
+ *     description: Initiates ETL process for QuickBooks financial data
+ *     tags: [ETL]
+ *     responses:
+ *       200:
+ *         description: QuickBooks data processed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ETLResponse'
+ *       400:
+ *         description: Bad request - ETL process failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.post("/quickbooks", async (req, res) => {
   try {
@@ -51,8 +74,31 @@ router.post("/quickbooks", async (req, res) => {
 });
 
 /**
- * POST /api/etl/rootfi
- * Process Rootfi data
+ * @swagger
+ * /api/etl/rootfi:
+ *   post:
+ *     summary: Process Rootfi data
+ *     description: Initiates ETL process for Rootfi financial data
+ *     tags: [ETL]
+ *     responses:
+ *       200:
+ *         description: Rootfi data processed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ETLResponse'
+ *       400:
+ *         description: Bad request - ETL process failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.post("/rootfi", async (req, res) => {
   try {
@@ -87,8 +133,31 @@ router.post("/rootfi", async (req, res) => {
 });
 
 /**
- * POST /api/etl/all
- * Process both QuickBooks and Rootfi data
+ * @swagger
+ * /api/etl/all:
+ *   post:
+ *     summary: Process both QuickBooks and Rootfi data
+ *     description: Initiates ETL process for both QuickBooks and Rootfi financial data sources
+ *     tags: [ETL]
+ *     responses:
+ *       200:
+ *         description: All data processed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ETLResponse'
+ *       400:
+ *         description: Bad request - ETL process failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.post("/all", async (req, res) => {
   try {
