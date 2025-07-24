@@ -320,4 +320,92 @@ export class DatabaseService {
       throw error;
     }
   }
+
+  /**
+   * Gets categories by date range and merges categories with the same name
+   * @param startDate - The start date to match
+   * @param endDate - The end date to match
+   * @returns Array of merged categories with their line items
+   */
+  public async getCategoriesByDateRange(
+    startDate: string,
+    endDate: string
+  ): Promise<any[]> {
+    await this.initialize();
+
+    try {
+      // Get all categories from report periods that match the date range
+      const categories = await AppDataSource.getRepository(
+        FinancialCategory
+      ).find({
+        where: {
+          reportPeriod: {
+            startDate: startDate,
+            endDate: endDate,
+          },
+        },
+        relations: ["lineItems", "reportPeriod", "reportPeriod.company"],
+        order: {
+          name: "ASC",
+        },
+      });
+
+      // Group categories by name and merge them
+      const mergedCategories = new Map<string, any>();
+
+      for (const category of categories) {
+        const categoryName = category.name;
+
+        if (!mergedCategories.has(categoryName)) {
+          // Create a new merged category
+          mergedCategories.set(categoryName, {
+            id: `merged_${categoryName}`,
+            name: categoryName,
+            value: 0,
+            categoryType: category.categoryType,
+            lineItems: [],
+            reportPeriods: [],
+            companies: [],
+          });
+        }
+
+        const mergedCategory = mergedCategories.get(categoryName);
+
+        // Sum the values
+        mergedCategory.value += Number(category.value);
+
+        // Add line items (concatenate)
+        if (category.lineItems && category.lineItems.length > 0) {
+          mergedCategory.lineItems.push(...category.lineItems);
+        }
+
+        // Track report periods and companies
+        if (category.reportPeriod) {
+          mergedCategory.reportPeriods.push({
+            id: category.reportPeriod.id,
+            startDate: category.reportPeriod.startDate,
+            endDate: category.reportPeriod.endDate,
+            company: category.reportPeriod.company,
+          });
+
+          if (category.reportPeriod.company) {
+            const companyExists = mergedCategory.companies.some(
+              (c: any) => c.id === category.reportPeriod.company.id
+            );
+            if (!companyExists) {
+              mergedCategory.companies.push(category.reportPeriod.company);
+            }
+          }
+        }
+      }
+
+      // Convert map to array and sort by name
+      return Array.from(mergedCategories.values()).sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+    } catch (error) {
+      console.error("Error getting categories by date range:", error);
+      throw error;
+    }
+  }
 }

@@ -235,6 +235,127 @@ router.get("/report-dates", async (req, res) => {
 
 /**
  * @swagger
+ * /api/data/categories/by-date-range:
+ *   get:
+ *     summary: Get categories by date range with merging
+ *     description: Retrieves all categories with their line items for report periods matching the specified start and end dates. Categories with the same name are merged (values summed, line items concatenated).
+ *     tags: [Data]
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: The start date to match (YYYY-MM-DD format)
+ *       - in: query
+ *         name: endDate
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: The end date to match (YYYY-MM-DD format)
+ *     responses:
+ *       200:
+ *         description: Categories retrieved and merged successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         description: Merged category ID
+ *                       name:
+ *                         type: string
+ *                         description: Category name
+ *                       value:
+ *                         type: number
+ *                         description: Summed value from all matching categories
+ *                       categoryType:
+ *                         type: string
+ *                         description: Category type
+ *                       lineItems:
+ *                         type: array
+ *                         description: Concatenated line items from all matching categories
+ *                       reportPeriods:
+ *                         type: array
+ *                         description: Report periods that were merged
+ *                       companies:
+ *                         type: array
+ *                         description: Companies associated with the merged categories
+ *                 message:
+ *                   type: string
+ *                   example: "Categories retrieved and merged successfully"
+ *       400:
+ *         description: Bad request - invalid date format or missing parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.get("/categories/by-date-range", async (req, res) => {
+  try {
+    await financialApp.initialize();
+    const { startDate, endDate } = req.query;
+    // Validate required parameters
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required parameters",
+        message: "Both startDate and endDate are required",
+      });
+    }
+
+    // Validate date format (YYYY-MM-DD)
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (
+      !dateRegex.test(startDate as string) ||
+      !dateRegex.test(endDate as string)
+    ) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid date format",
+        message: "Dates must be in YYYY-MM-DD format",
+      });
+    }
+
+    const categories = await financialApp.getCategoriesByDateRange(
+      startDate as string,
+      endDate as string
+    );
+
+    res.json({
+      success: true,
+      data: categories,
+      message: "Categories retrieved and merged successfully",
+    });
+  } catch (error) {
+    console.error("Error getting categories by date range:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to retrieve categories by date range",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
+
+/**
+ * @swagger
  * /api/data/categories/{reportPeriodId}:
  *   get:
  *     summary: Get categories by report period ID

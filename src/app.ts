@@ -196,6 +196,31 @@ export class FinancialDataApplication {
   }
 
   /**
+   * Gets categories by date range with merging logic
+   */
+  public async getCategoriesByDateRange(
+    startDate: string,
+    endDate: string
+  ): Promise<any[]> {
+    try {
+      console.log(
+        `📊 Getting categories for date range ${startDate} to ${endDate}...`
+      );
+      const categories = await this.databaseService.getCategoriesByDateRange(
+        startDate,
+        endDate
+      );
+      console.log(
+        `✅ Retrieved ${categories.length} merged categories for date range ${startDate} to ${endDate}`
+      );
+      return categories;
+    } catch (error) {
+      console.error("❌ Error getting categories by date range:", error);
+      throw error;
+    }
+  }
+
+  /**
    * Shuts down the application gracefully
    */
   public async shutdown(): Promise<void> {

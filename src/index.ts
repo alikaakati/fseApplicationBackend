@@ -5,7 +5,6 @@
  */
 
 import { FinancialDataApplication } from "./app";
-import { join } from "path";
 
 /**
  * Main application execution function
