@@ -357,7 +357,6 @@ export class DatabaseService {
         const categoryName = category.name;
 
         if (!mergedCategories.has(categoryName)) {
-          // Create a new merged category
           mergedCategories.set(categoryName, {
             id: `merged_${categoryName}`,
             name: categoryName,
@@ -379,7 +378,6 @@ export class DatabaseService {
           mergedCategory.lineItems.push(...category.lineItems);
         }
 
-        // Track report periods and companies
         if (category.reportPeriod) {
           mergedCategory.reportPeriods.push({
             id: category.reportPeriod.id,
@@ -405,6 +403,45 @@ export class DatabaseService {
       );
     } catch (error) {
       console.error("Error getting categories by date range:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Gets income data for a specific company grouped by year
+   * @param companyId - The company ID
+   * @returns Array of income data grouped by year
+   */
+  public async getCompanyIncomeByYear(companyId: number): Promise<any[]> {
+    await this.initialize();
+
+    try {
+      // Get all income categories for the company
+      const incomeCategories = await AppDataSource.getRepository(
+        FinancialCategory
+      ).find({
+        where: {
+          name: "income",
+          reportPeriod: {
+            company: { id: companyId },
+          },
+        },
+        relations: ["reportPeriod"],
+        order: {
+          reportPeriod: {
+            startDate: "ASC",
+          },
+        },
+      });
+
+      // Return simplified data with just period info and income value
+      return incomeCategories.map((category) => ({
+        periodStart: category.reportPeriod.startDate,
+        periodEnd: category.reportPeriod.endDate,
+        income: category.value,
+      }));
+    } catch (error) {
+      console.error("Error getting company income by year:", error);
       throw error;
     }
   }

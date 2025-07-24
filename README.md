@@ -98,6 +98,114 @@ src/
 │   ├── database/         # Database operations
 │   │   └── database.service.ts
 │   └── etl/             # ETL processing services
+```
+
+## 📊 API Endpoints
+
+### Data Endpoints
+
+#### Get All Companies
+
+```http
+GET /api/data/companies
+```
+
+Returns a list of all companies in the system.
+
+#### Get Company Income by Year
+
+```http
+GET /api/data/companies/{companyId}/income-by-year
+```
+
+Returns income data for a specific company with period start, period end, and income value for each period.
+
+**Parameters:**
+
+- `companyId` (path, required): The ID of the company
+
+**Response Format:**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "periodStart": "2023-01-01",
+      "periodEnd": "2023-01-31",
+      "income": 125000.0
+    },
+    {
+      "periodStart": "2023-02-01",
+      "periodEnd": "2023-02-28",
+      "income": 135000.0
+    }
+  ],
+  "message": "Income data retrieved successfully"
+}
+```
+
+**Chart Integration:**
+You can easily format this data for charting libraries:
+
+```javascript
+// Example with Chart.js
+const response = await fetch("/api/data/companies/1/income-by-year");
+const result = await response.json();
+
+const chartData = {
+  labels: result.data.map((item) => item.periodStart),
+  datasets: [
+    {
+      label: "Income",
+      data: result.data.map((item) => item.income),
+      backgroundColor: "rgba(54, 162, 235, 0.2)",
+      borderColor: "rgba(54, 162, 235, 1)",
+      borderWidth: 2,
+    },
+  ],
+};
+
+const ctx = document.getElementById("incomeChart").getContext("2d");
+new Chart(ctx, {
+  type: "bar",
+  data: chartData,
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  },
+});
+```
+
+## 🏗️ Project Structure
+
+```
+src/
+├── config/                 # Configuration files
+│   └── database.config.ts
+├── database/              # Database-related files
+│   ├── entities/          # TypeORM entities
+│   │   ├── company.entity.ts
+│   │   ├── financial-category.entity.ts
+│   │   ├── financial-line-item.entity.ts
+│   │   ├── report-period.entity.ts
+│   │   └── user.entity.ts
+│   ├── migrations/        # Database migrations
+│   │   └── 001-initial-schema.ts
+│   └── data-source.ts     # Database connection
+├── interfaces/            # TypeScript interfaces
+│   ├── database.interface.ts
+│   ├── etl.interface.ts
+│   ├── financial-data.interface.ts
+│   └── index.ts
+├── services/             # Business logic services
+│   ├── database/         # Database operations
+│   │   └── database.service.ts
+│   └── etl/             # ETL processing services
 │       ├── quickbooks-etl.service.ts
 │       ├── rootfi-etl.service.ts
 │       └── unified-etl.service.ts
