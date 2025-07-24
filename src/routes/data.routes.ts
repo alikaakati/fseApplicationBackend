@@ -164,13 +164,11 @@ router.post("/refresh", async (req, res) => {
 router.get("/companies", async (req, res) => {
   try {
     await financialApp.initialize();
-
-    // This would need to be implemented in the FinancialDataApplication
-    // For now, return a placeholder response
+    const companies = await financialApp.getCompanies();
     res.json({
       success: true,
-      message: "Companies endpoint - to be implemented",
-      data: [],
+      data: companies,
+      message: "Companies retrieved successfully",
     });
   } catch (error) {
     console.error("Error getting companies:", error);
@@ -425,6 +423,102 @@ router.get("/categories/:reportPeriodId", async (req, res) => {
     res.status(500).json({
       success: false,
       error: "Failed to retrieve categories",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/data/companies/{companyId}/income-by-year:
+ *   get:
+ *     summary: Get income data for a specific company grouped by year
+ *     description: Retrieves income data for a specific company, grouped by year and formatted for chart rendering
+ *     tags: [Data]
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the company
+ *     responses:
+ *       200:
+ *         description: Income data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       periodStart:
+ *                         type: string
+ *                         format: date
+ *                         description: Period start date
+ *                         example: "2023-01-01"
+ *                       periodEnd:
+ *                         type: string
+ *                         format: date
+ *                         description: Period end date
+ *                         example: "2023-01-31"
+ *                       income:
+ *                         type: number
+ *                         description: Income value for this period
+ *                         example: 125000.00
+ *                 message:
+ *                   type: string
+ *                   example: "Income data retrieved successfully"
+ *       400:
+ *         description: Bad request - invalid company ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Company not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.get("/companies/:companyId/income-by-year", async (req, res) => {
+  try {
+    await financialApp.initialize();
+    const companyId = parseInt(req.params.companyId);
+
+    if (isNaN(companyId)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid company ID",
+        message: "Company ID must be a valid number",
+      });
+    }
+
+    const incomeData = await financialApp.getCompanyIncomeByYear(companyId);
+
+    res.json({
+      success: true,
+      data: incomeData,
+      message: "Income data retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Error getting company income by year:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to retrieve income data",
       message: error instanceof Error ? error.message : "Unknown error",
     });
   }

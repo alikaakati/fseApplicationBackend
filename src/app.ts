@@ -221,6 +221,40 @@ export class FinancialDataApplication {
   }
 
   /**
+   * Gets all companies
+   */
+  public async getCompanies(): Promise<any[]> {
+    try {
+      console.log("🏢 Getting all companies...");
+      const companies = await this.databaseService.getCompanies();
+      console.log(`✅ Retrieved ${companies.length} companies`);
+      return companies;
+    } catch (error) {
+      console.error("❌ Error getting companies:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Gets income data for a specific company grouped by year
+   */
+  public async getCompanyIncomeByYear(companyId: number): Promise<any[]> {
+    try {
+      console.log(`📊 Getting income data for company ${companyId} by year...`);
+      const incomeData = await this.databaseService.getCompanyIncomeByYear(
+        companyId
+      );
+      console.log(
+        `✅ Retrieved income data for ${incomeData.length} years for company ${companyId}`
+      );
+      return incomeData;
+    } catch (error) {
+      console.error("❌ Error getting company income by year:", error);
+      throw error;
+    }
+  }
+
+  /**
    * Shuts down the application gracefully
    */
   public async shutdown(): Promise<void> {
