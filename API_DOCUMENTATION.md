@@ -5,7 +5,7 @@ This document describes the REST API endpoints available for the Financial Data 
 ## Base URL
 
 ```
-http://localhost:3001
+https://fseapplicationbackend.onrender.com
 ```
 
 ## Endpoints
@@ -183,43 +183,46 @@ npm run server
 **Get statistics:**
 
 ```bash
-curl http://localhost:3001/api/data/statistics
+curl https://fseapplicationbackend.onrender.com/api/data/statistics
 ```
 
 **Process QuickBooks data:**
 
 ```bash
-curl -X POST http://localhost:3001/api/etl/quickbooks
+curl -X POST https://fseapplicationbackend.onrender.com/api/etl/quickbooks
 ```
 
 **Process Rootfi data:**
 
 ```bash
-curl -X POST http://localhost:3001/api/etl/rootfi
+curl -X POST https://fseapplicationbackend.onrender.com/api/etl/rootfi
 ```
 
 **Process all data:**
 
 ```bash
-curl -X POST http://localhost:3001/api/etl/all
+curl -X POST https://fseapplicationbackend.onrender.com/api/etl/all
 ```
 
 **Refresh all data:**
 
 ```bash
-curl -X POST http://localhost:3001/api/data/refresh
+curl -X POST https://fseapplicationbackend.onrender.com/api/data/refresh
 ```
 
 ### Using JavaScript/Fetch
 
 ```javascript
 // Process QuickBooks data
-const response = await fetch("http://localhost:3001/api/etl/quickbooks", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const response = await fetch(
+  "https://fseapplicationbackend.onrender.com/api/etl/quickbooks",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+);
 
 const result = await response.json();
 console.log(result);

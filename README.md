@@ -333,23 +333,23 @@ npm run server
 
 ```bash
 # Get statistics
-curl http://localhost:3001/api/data/statistics
+curl https://fseapplicationbackend.onrender.com/api/data/statistics
 
 # Process QuickBooks data
-curl -X POST http://localhost:3001/api/etl/quickbooks
+curl -X POST https://fseapplicationbackend.onrender.com/api/etl/quickbooks
 
 # Process all data
-curl -X POST http://localhost:3001/api/etl/all
+curl -X POST https://fseapplicationbackend.onrender.com/api/etl/all
 
 # Clear database
-curl -X DELETE http://localhost:3001/api/data/clear
+curl -X DELETE https://fseapplicationbackend.onrender.com/api/data/clear
 ```
 
 ## 📚 API Documentation
 
 The application includes interactive OpenAPI/Swagger documentation that can be accessed at:
 
-**http://localhost:3001/api-docs**
+**https://fseapplicationbackend.onrender.com/api-docs**
 
 The documentation provides:
 

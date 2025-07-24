@@ -20,7 +20,7 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: "http://localhost:3001",
+        url: "https://fseapplicationbackend.onrender.com",
         description: "Development server",
       },
     ],
