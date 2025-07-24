@@ -152,19 +152,19 @@ export class QuickBooksETLService {
     unifiedKeys: Record<string, keyof PeriodData>
   ): void {
     rows.forEach((row) => {
-      if (row.Summary?.ColData) {
-        // Get the label from the first column (usually the row label)
-        const summaryLabel = row.ColData?.[0]?.value || "";
-        // Get the summary value from the summary column
-        const summaryValue = parseFloat(row.Summary.ColData[0]?.value || "0");
+      if (row.Summary?.ColData && row.group) {
+        // Check if the group matches a unified key
+        const unifiedKey = unifiedKeys[row.group];
+        if (unifiedKey) {
+          // Skip the first value (label) and process each period's value
+          const summaryValues = row.Summary.ColData.slice(1); // Skip the first element (label)
 
-        if (isValidNumber(summaryValue) && summaryLabel) {
-          const unifiedKey = unifiedKeys[summaryLabel];
-          if (unifiedKey) {
-            resultsByDate.forEach((period) => {
-              period[unifiedKey] = summaryValue;
-            });
-          }
+          summaryValues.forEach((colData: any, index: number) => {
+            const summaryValue = parseFloat(colData?.value || "0");
+            if (isValidNumber(summaryValue) && index < resultsByDate.length) {
+              resultsByDate[index][unifiedKey] = summaryValue;
+            }
+          });
         }
       }
     });
